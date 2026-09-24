@@ -176,16 +176,18 @@ La existencia de un archivo no demuestra que se cargue. Esto aplica especialment
 
 - [ ] Documentar el orden exacto de precedencia entre `defaults`, `dynamic`, estado generado y workflows.
 - [ ] Documentar reglas de ventanas y reglas de capas efectivamente cargadas.
-- [ ] Auditar keybinds efectivos y separar comandos HyDE de comandos reemplazables.
+- [x] Auditar keybinds efectivos y separar comandos HyDE de comandos reemplazables.
 - [ ] Auditar monitores y decidir si `monitors.lua` debe convertirse en configuracion propia.
-- [ ] Extraer la decoracion efectiva a una configuracion explicita de Grano.
-- [ ] Extraer las animaciones de `macos.lua` sin copiar la infraestructura Lua de HyDE.
+- [x] Extraer la decoracion efectiva a una configuracion explicita de Grano.
+- [x] Extraer las animaciones de `macos.lua` sin copiar la infraestructura Lua de HyDE.
 - [ ] Determinar el flujo real de wallpaper, Wallbash y colores.
 - [ ] Separar modulos funcionales de Waybar de modulos propios de HyDE.
 - [ ] Separar configuracion de Kitty y Rofi de sus temas generados.
 - [ ] Migrar Hyprlock y Hypridle eliminando `hyde-shell`.
 - [ ] Auditar servicios de arranque y decidir cuales necesita Grano.
 - [ ] Definir una estrategia de instalacion reproducible para una instalacion limpia de Arch Linux.
+
+La migracion de animaciones ya fue realizada en `hypr/hyprland.conf`. El perfil no conserva el nombre `macos`: ahora forma parte de la configuracion propia de Grano. Las curvas `spring` de la API Lua fueron reemplazadas por aproximaciones Bezier declarativas, porque `hyprland.conf` no expone la API de curvas spring. La configuracion fue validada con `Hyprland --verify-config`.
 
 ## Orden de migracion propuesto
 
@@ -216,6 +218,19 @@ Incluye la parte declarativa que Hyprland puede resolver directamente:
 - activacion general de animaciones.
 
 La configuracion fue validada con `Hyprland --verify-config` y devolvio `config ok`.
+
+## Keybinds migrados
+
+`hypr/hyprland.conf` contiene ahora los keybinds nativos de Hyprland para:
+
+- cerrar, forzar el cierre, salir, hacer floating y pseudo-tile;
+- fullscreen y cambio de split;
+- mover el foco;
+- redimensionar y mover ventanas;
+- mover ventanas con el raton;
+- navegar y mover ventanas entre los workspaces 1 a 10.
+
+Se dejaron fuera los binds que llaman `hyde-shell`, menus de Rofi, wallpaper, lockscreen, volumen, brillo, capturas y seleccion de temas. Esos comandos requieren una migracion separada de sus scripts y dependencias.
 
 ### Que puede vivir en hyprland.conf
 
