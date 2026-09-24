@@ -14,7 +14,8 @@
     "pulseaudio#microphone",
     "tray",
     "battery",
-    "custom/cliphist"
+    "custom/cliphist",
+    "custom/power"
   ],
 
   "hyprland/workspaces": {
@@ -120,5 +121,12 @@
     "tooltip": true,
     "tooltip-format": "Clipboard history",
     "on-click": "cliphist list | rofi -dmenu -p Clipboard | cliphist decode | wl-copy"
+  },
+
+  "custom/power": {
+    "format": "[power]",
+    "tooltip": true,
+    "tooltip-format": "Power menu",
+    "on-click": "wlogout -p layer-shell"
   }
 }

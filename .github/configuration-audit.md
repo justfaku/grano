@@ -98,7 +98,13 @@ Los colores de los bordes provienen de `~/.local/state/hyde/lua_state/colors.lua
 
 En `hypr/hyprland.conf` se agrego un snapshot estatico de los cuatro colores usados por los bordes. Esto conserva la apariencia actual sin hacer que Grano dependa de `colors.lua` o de Wallbash para iniciar Hyprland.
 
-Esta paleta estatica es temporal. La idea futura es usar Wallbash, o una implementacion propia compatible, para regenerar los colores a partir del wallpaper seleccionado desde `assets/wallpapers/`. Esa integracion no forma parte de esta etapa.
+`hypr/colors.conf` contiene ahora la paleta estatica de fallback. `scripts/generate-colors.sh` usa Wallbash sobre el wallpaper instalado y genera un reemplazo de `~/.config/grano/colors.conf`; si Wallbash no esta disponible, se conserva el fallback.
+
+## Dependencia opcional de Wallbash
+
+Grano no instala Wallbash en una instalacion limpia. El instalador solo lo usa si ya existe en `~/.local/lib/hyde/wallbash.sh` y si ImageMagick esta disponible. En caso contrario, Grano conserva `colors.conf` como fallback y sigue funcionando.
+
+Actualmente Wallbash proviene de HyDE, por lo que instalarlo como parte obligatoria de Grano mantendria una dependencia del framework que queremos eliminar. En una etapa futura habra que decidir entre extraer el algoritmo necesario, encontrar una implementacion independiente o crear un generador propio de colores.
 
 ## Componentes activos de la sesion
 
@@ -198,7 +204,7 @@ La existencia de un archivo no demuestra que se cargue. Esto aplica especialment
 - [x] Crear la configuracion propia de Hyprpaper y definir la ruta instalada de los assets.
 - [x] Implementar `install.sh` para instalar el wallpaper en `~/.config/grano/wallpapers/`.
 - [x] Conectar Hyprpaper al arranque propio de Grano sin iniciar una segunda instancia de wallpaper.
-- [ ] Reemplazar la paleta estatica temporal por colores generados desde el wallpaper de `assets/wallpapers/` mediante Wallbash o una integracion propia.
+- [x] Reemplazar la paleta estatica temporal por colores generados desde el wallpaper de `assets/wallpapers/` mediante Wallbash.
 - [x] Separar modulos funcionales de Waybar de modulos propios de HyDE.
 - [ ] Conectar la configuracion propia de Waybar al arranque de Grano.
 - [ ] Reemplazar los modulos de Waybar que todavia dependen de HyDE.
@@ -222,6 +228,17 @@ La migracion de animaciones ya fue realizada en `hypr/hyprland.conf`. El perfil 
 9. Servicios de arranque y eliminacion progresiva de HyDE.
 
 Cada etapa debe producir un cambio pequeno, verificable y separado de los demas. No modificar archivos internos de HyDE como solucion permanente.
+
+## Pendientes resumidos
+
+1. Completar los modulos de Waybar que todavia dependen de HyDE: Cava, cliphist avanzado, hyprsunset, power menu y menu principal.
+2. Conectar Waybar propia al arranque de Grano y retirar progresivamente la Waybar de HyDE.
+3. Migrar Kitty y Rofi, separando configuracion funcional de temas.
+4. Migrar Hyprlock e Hypridle y eliminar `hyde-shell`.
+5. Reemplazar servicios de arranque `hyde-*` por servicios o scripts propios.
+6. Resolver Wallbash: dependencia independiente, algoritmo extraido o generador propio.
+7. Completar `install.sh` para una instalacion limpia de Arch Linux y documentar dependencias.
+8. Conectar la configuracion propia completa a la sesion y retirar la dependencia de HyDE de forma gradual.
 
 ## Primer paso de migracion
 
