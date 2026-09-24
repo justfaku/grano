@@ -96,6 +96,10 @@ Tema seleccionado:
 
 Los colores de los bordes provienen de `~/.local/state/hyde/lua_state/colors.lua`, generado por Wallbash.
 
+En `hypr/hyprland.conf` se agrego un snapshot estatico de los cuatro colores usados por los bordes. Esto conserva la apariencia actual sin hacer que Grano dependa de `colors.lua` o de Wallbash para iniciar Hyprland.
+
+Esta paleta estatica es temporal. La idea futura es usar Wallbash, o una implementacion propia compatible, para regenerar los colores a partir del wallpaper seleccionado desde `assets/wallpapers/`. Esa integracion no forma parte de esta etapa.
+
 ## Componentes activos de la sesion
 
 Confirmados por procesos o servicios de usuario:
@@ -119,6 +123,10 @@ Confirmados por procesos o servicios de usuario:
 ```text
 ~/.local/lib/hyde/wallpaper.sh --start --global
 ```
+
+La configuracion existente de Hyprpaper apunta a `~/Pictures/wallpaper.png`, pero ese archivo no existe. El backend observado en la sesion es `awww`, iniciado y administrado por HyDE. Grano usara Hyprpaper como backend propio, pero todavia falta definir con `install.sh` la ruta instalada del asset antes de activarlo.
+
+El recurso `wallpaper.webp` esta en `assets/wallpapers/wallpaper.webp`. Es un WebP de 1080x675 y coincide con la copia que estaba en `~/Downloads/wallpaper.webp`. Se eligio Hyprpaper como backend de Grano por ser estatico, simple y ya estar instalado. Todavia no se activa desde `hyprland.conf`: primero hay que definir con `install.sh` la ruta instalada del asset, para que la configuracion no dependa del directorio del repositorio.
 
 ## Dependencias directas de HyDE
 
@@ -180,7 +188,9 @@ La existencia de un archivo no demuestra que se cargue. Esto aplica especialment
 - [ ] Auditar monitores y decidir si `monitors.lua` debe convertirse en configuracion propia.
 - [x] Extraer la decoracion efectiva a una configuracion explicita de Grano.
 - [x] Extraer las animaciones de `macos.lua` sin copiar la infraestructura Lua de HyDE.
-- [ ] Determinar el flujo real de wallpaper, Wallbash y colores.
+- [x] Determinar el flujo real de wallpaper, Wallbash y colores.
+- [ ] Crear la configuracion propia de Hyprpaper y conectarla despues de definir la ruta de instalacion de los assets.
+- [ ] Reemplazar la paleta estatica temporal por colores generados desde el wallpaper de `assets/wallpapers/` mediante Wallbash o una integracion propia.
 - [ ] Separar modulos funcionales de Waybar de modulos propios de HyDE.
 - [ ] Separar configuracion de Kitty y Rofi de sus temas generados.
 - [ ] Migrar Hyprlock y Hypridle eliminando `hyde-shell`.
