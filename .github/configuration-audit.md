@@ -175,7 +175,7 @@ La existencia de un archivo no demuestra que se cargue. Esto aplica especialment
 ## Pendientes
 
 - [ ] Documentar el orden exacto de precedencia entre `defaults`, `dynamic`, estado generado y workflows.
-- [ ] Documentar reglas de ventanas y reglas de capas efectivamente cargadas.
+- [x] Documentar reglas de ventanas y reglas de capas efectivamente cargadas.
 - [x] Auditar keybinds efectivos y separar comandos HyDE de comandos reemplazables.
 - [ ] Auditar monitores y decidir si `monitors.lua` debe convertirse en configuracion propia.
 - [x] Extraer la decoracion efectiva a una configuracion explicita de Grano.
@@ -231,6 +231,19 @@ La configuracion fue validada con `Hyprland --verify-config` y devolvio `config 
 - navegar y mover ventanas entre los workspaces 1 a 10.
 
 Se dejaron fuera los binds que llaman `hyde-shell`, menus de Rofi, wallpaper, lockscreen, volumen, brillo, capturas y seleccion de temas. Esos comandos requieren una migracion separada de sus scripts y dependencias.
+
+## Reglas migradas
+
+`hypr/hyprland.conf` contiene ahora reglas declarativas para:
+
+- ventanas de dialogo, portales, gestores de archivos y utilidades flotantes;
+- ventanas Picture-in-Picture, con pin, posicion y tamano;
+- dialogos de autenticacion y seleccion de archivos;
+- `xwaylandvideobridge`, con sus restricciones de foco, animacion, blur, tamano y workspace;
+- capas de Rofi, notificaciones, Swaync, Waybar y logout;
+- capa `selection`, sin animacion.
+
+Estas reglas provienen de `window_rules.lua` y `layer_rules.lua`. Durante la auditoria, las capas observadas en ejecucion fueron `waybar` y `awww-daemon`; el resto de reglas corresponde a componentes disponibles que no estaban abiertos en ese momento.
 
 ### Que puede vivir en hyprland.conf
 
