@@ -1,0 +1,124 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 38,
+  "exclusive": true,
+  "passthrough": false,
+  "reload_style_on_change": true,
+
+  "modules-left": ["hyprland/workspaces"],
+  "modules-center": ["idle_inhibitor", "clock"],
+  "modules-right": [
+    "backlight",
+    "pulseaudio",
+    "pulseaudio#microphone",
+    "tray",
+    "battery",
+    "custom/cliphist"
+  ],
+
+  "hyprland/workspaces": {
+    "all-outputs": true,
+    "active-only": false,
+    "disable-scroll": false,
+    "tooltip": false,
+    "on-scroll-up": "hyprctl dispatch workspace e-1",
+    "on-scroll-down": "hyprctl dispatch workspace e+1"
+  },
+
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": "[awake]",
+      "deactivated": "[sleep]"
+    },
+    "tooltip": true,
+    "tooltip-format-activated": "Preventing idle actions",
+    "tooltip-format-deactivated": "Idle actions enabled"
+  },
+
+  "clock": {
+    "format": "{:%I:%M %p}",
+    "format-alt": "{:%R %d.%m.%y}",
+    "tooltip-format": "{calendar}",
+    "calendar": {
+      "mode": "month",
+      "mode-mon-col": 3,
+      "on-scroll": 1,
+      "format": {
+        "months": "<span color='#ecd3a0'><b>{}</b></span>",
+        "weekdays": "<span color='#93cee9'><b>{}</b></span>",
+        "today": "<span color='#90ceaa'><b>{}</b></span>"
+      }
+    },
+    "actions": {
+      "on-click-right": "mode",
+      "on-click-forward": "tz_up",
+      "on-click-backward": "tz_down",
+      "on-scroll-up": "shift_up",
+      "on-scroll-down": "shift_down"
+    }
+  },
+
+  "backlight": {
+    "format": "{icon} {percent}%",
+    "format-icons": ["[0]", "[1]", "[2]", "[3]", "[4]", "[5]", "[6]", "[7]", "[8]"],
+    "on-scroll-up": "brightnessctl set 5%+",
+    "on-scroll-down": "brightnessctl set 5%-",
+    "min-length": 6,
+    "tooltip": true,
+    "tooltip-format": "Backlight level: {percent}%"
+  },
+
+  "pulseaudio": {
+    "format": "{icon} {volume}",
+    "format-muted": "[muted]",
+    "on-click": "pavucontrol-qt -t 3 || pavucontrol -t 3",
+    "on-click-middle": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "on-scroll-up": "wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+",
+    "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-",
+    "tooltip-format": "{desc} // {volume}%",
+    "scroll-step": 5,
+    "format-icons": {
+      "headphone": "[headphones]",
+      "hands-free": "[headset]",
+      "headset": "[headset]",
+      "phone": "[phone]",
+      "portable": "[portable]",
+      "car": "[car]",
+      "default": ["[low]", "[medium]", "[high]"]
+    }
+  },
+
+  "pulseaudio#microphone": {
+    "format": "{format_source}",
+    "format-source": "[mic]",
+    "format-source-muted": "[mic muted]",
+    "on-click": "pavucontrol-qt -t 4 || pavucontrol -t 4",
+    "on-click-middle": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+    "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%+",
+    "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%-",
+    "tooltip-format": "{source_desc} // {source_volume}%",
+    "scroll-step": 5
+  },
+
+  "tray": {
+    "icon-size": 16,
+    "spacing": 8
+  },
+
+  "battery": {
+    "format": "[battery] {capacity}%",
+    "format-charging": "[charging] {capacity}%",
+    "format-plugged": "[plugged] {capacity}%",
+    "format-alt": "{time} [battery]",
+    "format-icons": ["[empty]", "[1]", "[2]", "[3]", "[4]", "[5]", "[6]", "[7]", "[8]", "[full]"]
+  },
+
+  "custom/cliphist": {
+    "format": "[clipboard]",
+    "tooltip": true,
+    "tooltip-format": "Clipboard history",
+    "on-click": "cliphist list | rofi -dmenu -p Clipboard | cliphist decode | wl-copy"
+  }
+}

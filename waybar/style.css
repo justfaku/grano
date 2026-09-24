@@ -1,0 +1,70 @@
+@define-color bar-bg rgba(31, 35, 40, 0.95);
+@define-color main-bg #101419;
+@define-color main-fg #93cee9;
+@define-color active #90ceaa;
+@define-color accent #ecd3a0;
+@define-color muted #86aaec;
+
+* {
+  border: none;
+  border-radius: 0;
+  font-family: "JetBrainsMono Nerd Font";
+  font-size: 10px;
+  min-height: 0;
+}
+
+window#waybar {
+  background: @bar-bg;
+  color: @main-fg;
+}
+
+.modules-left,
+.modules-center,
+.modules-right {
+  margin: 4px 8px;
+}
+
+#workspaces button,
+#idle_inhibitor,
+#clock,
+#backlight,
+#pulseaudio,
+#pulseaudio\.microphone,
+#tray,
+#battery,
+#custom-cliphist {
+  background: @main-bg;
+  color: @main-fg;
+  padding: 0 10px;
+  margin: 0 2px;
+}
+
+#workspaces button {
+  color: @muted;
+}
+
+#workspaces button.active {
+  color: @main-bg;
+  background: @active;
+}
+
+#clock {
+  color: @accent;
+}
+
+#idle_inhibitor.activated,
+#battery.charging,
+#battery.plugged {
+  color: @active;
+}
+
+#pulseaudio.muted,
+#pulseaudio\.microphone.source-muted {
+  color: #dd6777;
+}
+
+tooltip {
+  background: @main-bg;
+  border: 1px solid @muted;
+  color: @main-fg;
+}

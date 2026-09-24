@@ -126,7 +126,7 @@ Confirmados por procesos o servicios de usuario:
 
 La configuracion existente de Hyprpaper apunta a `~/Pictures/wallpaper.png`, pero ese archivo no existe. El backend observado en la sesion es `awww`, iniciado y administrado por HyDE. Grano usara Hyprpaper como backend propio, pero todavia falta definir con `install.sh` la ruta instalada del asset antes de activarlo.
 
-El recurso `wallpaper.webp` esta en `assets/wallpapers/wallpaper.webp`. Es un WebP de 1080x675 y coincide con la copia que estaba en `~/Downloads/wallpaper.webp`. Se eligio Hyprpaper como backend de Grano por ser estatico, simple y ya estar instalado. Todavia no se activa desde `hyprland.conf`: primero hay que definir con `install.sh` la ruta instalada del asset, para que la configuracion no dependa del directorio del repositorio.
+El recurso `wallpaper.webp` esta en `assets/wallpapers/wallpaper.webp`. Es un WebP de 1080x675 y coincide con la copia que estaba en `~/Downloads/wallpaper.webp`. Se eligio Hyprpaper como backend de Grano por ser estatico, simple y ya estar instalado. La convencion de instalacion sera `~/.config/grano/wallpapers/wallpaper.webp`, y `hypr/hyprpaper.conf` ya apunta a esa ruta. Todavia no se activa desde `hyprland.conf`: falta implementar el instalador y el arranque propio.
 
 ## Dependencias directas de HyDE
 
@@ -189,7 +189,9 @@ La existencia de un archivo no demuestra que se cargue. Esto aplica especialment
 - [x] Extraer la decoracion efectiva a una configuracion explicita de Grano.
 - [x] Extraer las animaciones de `macos.lua` sin copiar la infraestructura Lua de HyDE.
 - [x] Determinar el flujo real de wallpaper, Wallbash y colores.
-- [ ] Crear la configuracion propia de Hyprpaper y conectarla despues de definir la ruta de instalacion de los assets.
+- [x] Crear la configuracion propia de Hyprpaper y definir la ruta instalada de los assets.
+- [x] Implementar `install.sh` para instalar el wallpaper en `~/.config/grano/wallpapers/`.
+- [x] Conectar Hyprpaper al arranque propio de Grano sin iniciar una segunda instancia de wallpaper.
 - [ ] Reemplazar la paleta estatica temporal por colores generados desde el wallpaper de `assets/wallpapers/` mediante Wallbash o una integracion propia.
 - [ ] Separar modulos funcionales de Waybar de modulos propios de HyDE.
 - [ ] Separar configuracion de Kitty y Rofi de sus temas generados.
