@@ -1,13 +1,15 @@
 # Grano: auditoria de configuracion actual
 
-Estado: investigacion inicial
+Estado: migracion incremental en curso
 Fecha: 2026-09-24
 
 Este documento registra lo observado en la sesion actual. No es una configuracion de Grano y no debe usarse como destino para archivos de HyDE.
 
 ## Resumen
 
-La sesion actual usa HyDE como framework de arranque y configuracion sobre Hyprland. El repositorio de Grano todavia no contiene una configuracion propia equivalente.
+La sesion actual usa HyDE como framework de arranque y configuracion sobre Hyprland. El repositorio de Grano ya contiene una primera configuracion propia aislada, pero la sesion activa todavia no la usa.
+
+Para el estado resumido y las instrucciones de continuidad, leer tambien `.github/AI-HANDOFF.md`.
 
 La cadena efectiva observada es:
 
@@ -96,7 +98,7 @@ Tema seleccionado:
 
 Los colores de los bordes provienen de `~/.local/state/hyde/lua_state/colors.lua`, generado por Wallbash.
 
-En `hypr/hyprland.conf` se agrego un snapshot estatico de los cuatro colores usados por los bordes. Esto conserva la apariencia actual sin hacer que Grano dependa de `colors.lua` o de Wallbash para iniciar Hyprland.
+En `hypr/colors.conf` existe un fallback estatico de los cuatro colores usados por los bordes. `hyprland.conf` lo carga con `source`.
 
 `hypr/colors.conf` contiene ahora la paleta estatica de fallback. `scripts/generate-colors.sh` usa Wallbash sobre el wallpaper instalado y genera un reemplazo de `~/.config/grano/colors.conf`; si Wallbash no esta disponible, se conserva el fallback.
 
@@ -130,9 +132,9 @@ Confirmados por procesos o servicios de usuario:
 ~/.local/lib/hyde/wallpaper.sh --start --global
 ```
 
-La configuracion existente de Hyprpaper apunta a `~/Pictures/wallpaper.png`, pero ese archivo no existe. El backend observado en la sesion es `awww`, iniciado y administrado por HyDE. Grano usara Hyprpaper como backend propio, pero todavia falta definir con `install.sh` la ruta instalada del asset antes de activarlo.
+La configuracion existente de Hyprpaper apunta a `~/Pictures/wallpaper.png`, pero ese archivo no existe. El backend observado en la sesion es `awww`, iniciado y administrado por HyDE. Grano usa Hyprpaper como backend propio en su configuracion aislada; no se activa en la sesion actual mientras HyDE siga administrando Awww.
 
-El recurso `wallpaper.webp` esta en `assets/wallpapers/wallpaper.webp`. Es un WebP de 1080x675 y coincide con la copia que estaba en `~/Downloads/wallpaper.webp`. Se eligio Hyprpaper como backend de Grano por ser estatico, simple y ya estar instalado. La convencion de instalacion sera `~/.config/grano/wallpapers/wallpaper.webp`, y `hypr/hyprpaper.conf` ya apunta a esa ruta. Todavia no se activa desde `hyprland.conf`: falta implementar el instalador y el arranque propio.
+El recurso `wallpaper.webp` esta en `assets/wallpapers/wallpaper.webp`. Es un WebP de 1080x675. Se eligio Hyprpaper como backend de Grano por ser estatico, simple y ya estar instalado. La convencion de instalacion es `~/.config/grano/wallpapers/wallpaper.webp`; `install.sh` y `hypr/hyprland.conf` ya estan preparados para esa ruta cuando Grano sea la configuracion activa.
 
 ## Dependencias directas de HyDE
 
@@ -167,7 +169,7 @@ La barra visible usa actualmente estos grupos y modulos: workspaces, Cava, idle 
 
 Se creo una configuracion propia en `waybar/config.jsonc` y `waybar/style.css` con los modulos funcionales que no necesitan HyDE. Todavia no reemplaza la barra activa: se instala de forma aislada bajo `~/.config/grano/waybar/` y debe conectarse al arranque propio de Grano despues de completar los modulos dependientes.
 
-Los modulos que quedaron fuera por ahora son Cava, keybind hint, cliphist avanzado, hyprsunset con menu, power menu y menu de HyDE.
+Los modulos que quedaron fuera por ahora son Cava, keybind hint, hyprsunset con menu y menu de HyDE. El clipboard basico ya usa `cliphist` y `rofi` directamente, y el power menu usa `wlogout` directamente en la configuracion propia. Hyprsunset queda bloqueado temporalmente porque su CLI no ofrece consulta ni control IPC documentado; lanzarlo desde Waybar podria crear procesos duplicados.
 
 ### Kitty
 
@@ -204,10 +206,11 @@ La existencia de un archivo no demuestra que se cargue. Esto aplica especialment
 - [x] Crear la configuracion propia de Hyprpaper y definir la ruta instalada de los assets.
 - [x] Implementar `install.sh` para instalar el wallpaper en `~/.config/grano/wallpapers/`.
 - [x] Conectar Hyprpaper al arranque propio de Grano sin iniciar una segunda instancia de wallpaper.
-- [x] Reemplazar la paleta estatica temporal por colores generados desde el wallpaper de `assets/wallpapers/` mediante Wallbash.
+- [x] Reemplazar la paleta estatica temporal por colores generados desde el wallpaper de `assets/wallpapers/` mediante Wallbash, con fallback.
 - [x] Separar modulos funcionales de Waybar de modulos propios de HyDE.
 - [ ] Conectar la configuracion propia de Waybar al arranque de Grano.
 - [ ] Reemplazar los modulos de Waybar que todavia dependen de HyDE.
+- [ ] Definir un control seguro para hyprsunset sin iniciar procesos duplicados.
 - [ ] Separar configuracion de Kitty y Rofi de sus temas generados.
 - [ ] Migrar Hyprlock y Hypridle eliminando `hyde-shell`.
 - [ ] Auditar servicios de arranque y decidir cuales necesita Grano.
@@ -231,7 +234,7 @@ Cada etapa debe producir un cambio pequeno, verificable y separado de los demas.
 
 ## Pendientes resumidos
 
-1. Completar los modulos de Waybar que todavia dependen de HyDE: Cava, cliphist avanzado, hyprsunset, power menu y menu principal.
+1. Completar los modulos de Waybar que todavia dependen de HyDE: Cava, keybind hint, hyprsunset y menu principal.
 2. Conectar Waybar propia al arranque de Grano y retirar progresivamente la Waybar de HyDE.
 3. Migrar Kitty y Rofi, separando configuracion funcional de temas.
 4. Migrar Hyprlock e Hypridle y eliminar `hyde-shell`.
