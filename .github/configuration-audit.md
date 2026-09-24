@@ -157,6 +157,12 @@ Dependencias observadas:
 
 Solo debe existir una instancia de Waybar. Durante la auditoria se inicio una instancia temporal de diagnostico y fue cerrada; la verificacion final mostro una sola instancia administrada por HyDE.
 
+La barra visible usa actualmente estos grupos y modulos: workspaces, Cava, idle inhibitor, clock, backlight, pulseaudio, microfono, tray, battery, keybind hint, cliphist, hyprsunset, menu de HyDE y power. `includes.json` carga muchos modulos adicionales disponibles, pero no todos forman parte de la barra visible.
+
+Se creo una configuracion propia en `waybar/config.jsonc` y `waybar/style.css` con los modulos funcionales que no necesitan HyDE. Todavia no reemplaza la barra activa: se instala de forma aislada bajo `~/.config/grano/waybar/` y debe conectarse al arranque propio de Grano despues de completar los modulos dependientes.
+
+Los modulos que quedaron fuera por ahora son Cava, keybind hint, cliphist avanzado, hyprsunset con menu, power menu y menu de HyDE.
+
 ### Kitty
 
 `~/.config/kitty/kitty.conf` incluye `hyde.conf`, que a su vez incluye `theme.conf`.
@@ -182,10 +188,10 @@ La existencia de un archivo no demuestra que se cargue. Esto aplica especialment
 
 ## Pendientes
 
-- [ ] Documentar el orden exacto de precedencia entre `defaults`, `dynamic`, estado generado y workflows.
+- [x] Documentar el orden exacto de precedencia entre `defaults`, `dynamic`, estado generado y workflows.
 - [x] Documentar reglas de ventanas y reglas de capas efectivamente cargadas.
 - [x] Auditar keybinds efectivos y separar comandos HyDE de comandos reemplazables.
-- [ ] Auditar monitores y decidir si `monitors.lua` debe convertirse en configuracion propia.
+- [x] Auditar monitores y convertir el monitor actualmente usado a configuracion propia.
 - [x] Extraer la decoracion efectiva a una configuracion explicita de Grano.
 - [x] Extraer las animaciones de `macos.lua` sin copiar la infraestructura Lua de HyDE.
 - [x] Determinar el flujo real de wallpaper, Wallbash y colores.
@@ -193,7 +199,9 @@ La existencia de un archivo no demuestra que se cargue. Esto aplica especialment
 - [x] Implementar `install.sh` para instalar el wallpaper en `~/.config/grano/wallpapers/`.
 - [x] Conectar Hyprpaper al arranque propio de Grano sin iniciar una segunda instancia de wallpaper.
 - [ ] Reemplazar la paleta estatica temporal por colores generados desde el wallpaper de `assets/wallpapers/` mediante Wallbash o una integracion propia.
-- [ ] Separar modulos funcionales de Waybar de modulos propios de HyDE.
+- [x] Separar modulos funcionales de Waybar de modulos propios de HyDE.
+- [ ] Conectar la configuracion propia de Waybar al arranque de Grano.
+- [ ] Reemplazar los modulos de Waybar que todavia dependen de HyDE.
 - [ ] Separar configuracion de Kitty y Rofi de sus temas generados.
 - [ ] Migrar Hyprlock y Hypridle eliminando `hyde-shell`.
 - [ ] Auditar servicios de arranque y decidir cuales necesita Grano.
