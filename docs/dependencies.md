@@ -32,4 +32,14 @@ Esta lista describe los comandos usados por la configuracion propia.
 
 ## Arch Linux
 
-Los nombres exactos de paquetes deben verificarse con `pacman -Ss` en la instalacion destino. Grano no instala paquetes automaticamente.
+El migrador actual verifica estos comandos, pero no instala paquetes:
+
+- `Hyprland`, `hyprpaper`, `waybar`, `hypridle`, `hyprlock`
+- `kitty`, `rofi`, `wlogout`, `brightnessctl`
+- `wl-clip-persist`, `wl-paste`, `cliphist`, `udiskie`
+- `wpctl`, `jq`, `uwsm`
+
+Los nombres exactos de paquetes deben verificarse con `pacman -Ss` en la
+instalacion destino. En el futuro se puede anadir un manifiesto Arch y una
+opcion explicita para instalar los paquetes faltantes. La migracion actual no
+instala paquetes.

@@ -26,6 +26,7 @@ La configuracion propia ya existe en el repositorio y se instala de forma aislad
 - `pypr/`: scratchpad opcional.
 - `uwsm/env-hyprland.d/00-grano.sh`: entorno preparado, no activado.
 - `install.sh`: instalador aislado.
+- `scripts/install-from-tty.sh`: migracion desde una TTY, sin instalar paquetes, con activacion automatica de UWSM.
 
 ## Lo que ya funciona en el repositorio
 
@@ -40,15 +41,16 @@ La configuracion propia ya existe en el repositorio y se instala de forma aislad
 
 ## Pendientes
 
-1. Verificar paquetes Arch en una instalacion limpia.
-2. Activar manualmente UWSM de Grano como ultimo paso, fuera de una sesion activa.
+1. Ejecutar `scripts/install-from-tty.sh` desde una TTY.
+2. Confirmar `GRANO` para terminar la sesion grafica y arrancar UWSM.
 3. Retirar la configuracion externa y servicios duplicados solo despues de validar Grano.
+4. Anadir en el futuro un manifiesto de paquetes Arch y una opcion explicita de instalacion.
 
 ## Reglas de seguridad
 
 - No iniciar Waybar, Hyprpaper, Hypridle o Hyprlock para pruebas si ya existe una instancia activa.
 - No modificar configuraciones fuera del repositorio como solucion definitiva.
-- No activar la plantilla UWSM antes de terminar la migracion.
+- No ejecutar el migrador desde una terminal grafica: termina la sesion activa.
 - No instalar dependencias automaticamente sin documentarlas.
 
 ## Validacion
@@ -56,6 +58,7 @@ La configuracion propia ya existe en el repositorio y se instala de forma aislad
 ```sh
 /usr/bin/Hyprland --verify-config --config hypr/hyprland.conf
 /usr/bin/sh -n install.sh
+/usr/bin/sh -n scripts/install-from-tty.sh
 /usr/bin/bash -n scripts/generate-colors.sh
 /usr/bin/jq empty waybar/config.jsonc
 /usr/bin/git diff --check

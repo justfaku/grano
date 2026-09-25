@@ -18,13 +18,26 @@ Run the installer from the repository root:
 
 The installer copies Grano files to `~/.config/grano/` and generates application colors from the bundled wallpaper when ImageMagick is available. Wallbash may be used as an optional color backend when already installed. A versioned static palette is always kept as fallback.
 
+For the current migration from a graphical HyDE session, switch to a TTY
+without logging out and run:
+
+```sh
+scripts/install-from-tty.sh
+```
+
+This wrapper verifies required commands, backs up existing desktop
+configuration under `~/.config/grano-backups/`, runs `install.sh`, and
+prepares the UWSM environment template. It does not install packages or remove
+HyDE files. After asking for a `GRANO` confirmation, it terminates the current
+graphical session and starts Grano through UWSM.
+
 The installer does not:
 
 - install Arch packages;
 - activate the UWSM session template;
 - replace the current desktop session;
 - stop existing desktop services;
-- start duplicate wallpaper, bar or idle processes.
+- start duplicate wallpaper, bar or idle processes in the old session.
 
 ## Layout
 
@@ -41,6 +54,7 @@ waybar/                 Bar configuration and theme
 docs/                   Dependency and maintenance notes
 .github/                Project rules, audit and handoff notes
 install.sh              Isolated installer
+scripts/install-from-tty.sh  TTY migration wrapper
 ```
 
 ## Design Principles
