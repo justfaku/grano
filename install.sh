@@ -32,6 +32,7 @@ install -m 644 "$repo_dir/hyprlock/hyprlock.conf" \
     "$grano_config/hyprlock.conf"
 install -m 644 "$repo_dir/hypridle/hypridle.conf" \
     "$grano_config/hypridle.conf"
+install -m 644 "$repo_dir/pypr/config.toml" "$grano_config/pypr.toml"
 
 if [ -x "$HOME/.local/lib/hyde/wallbash.sh" ] && command -v magick >/dev/null 2>&1; then
     "$grano_config/generate-colors.sh" \

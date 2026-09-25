@@ -225,7 +225,8 @@ La existencia de un archivo no demuestra que se cargue. Esto aplica especialment
 - [x] Generar las paletas de Waybar, Kitty y Rofi desde la salida comun de Wallbash.
 - [ ] Conectar Kitty y Rofi propios al arranque/configuracion activa de Grano.
 - [x] Migrar Hyprlock y Hypridle eliminando `hyde-shell`.
-- [ ] Conectar Hyprlock e Hypridle propios al arranque de Grano.
+- [x] Conectar Hyprlock propio al flujo de bloqueo de Grano.
+- [x] Conectar Hypridle propio al arranque de la configuracion de Grano.
 - [ ] Auditar servicios de arranque y decidir cuales necesita Grano.
 - [ ] Definir una estrategia de instalacion reproducible para una instalacion limpia de Arch Linux.
 
