@@ -34,6 +34,8 @@ La sesion activa sigue usando HyDE:
 
 La configuracion de Grano aun no reemplaza la sesion activa. No iniciar la configuracion de Grano encima de HyDE sin planificar el cambio de backend y evitar duplicados.
 
+Cuando Grano sea la configuracion activa, `hyprland.conf` inicia tambien `wl-clip-persist`, los dos watchers de `cliphist` y Udiskie sin depender de HyDE.
+
 ## Lo que ya esta en Grano
 
 ### Hyprland
@@ -71,6 +73,8 @@ Las curvas `spring` del perfil Lua fueron aproximadas con Bezier porque `hyprlan
 
 La sesion actual usa Awww administrado por HyDE, no el Hyprpaper de Grano. No cambiar eso durante una auditoria.
 
+Pypr tiene ahora una configuracion propia en `pypr/config.toml` y un arranque opcional desde `hyprland.conf`. El watcher de HyDE (`config.lua`) no se migra porque solo regenera estado interno de HyDE. Awww y Hyprsunset tampoco se reemplazan durante la transicion: hay que retirar sus servicios antes de activar los backends de Grano.
+
 ### Instalador
 
 `install.sh` instala en `~/.config/grano/`:
@@ -85,6 +89,7 @@ La sesion actual usa Awww administrado por HyDE, no el Hyprpaper de Grano. No ca
 - `kitty/kitty.conf`;
 - `kitty/theme.conf`;
 - `rofi/theme.rasi`.
+- `pypr/config.toml`.
 
 `scripts/generate-colors.sh` regenera tambien `waybar/theme.css`, `kitty/theme.conf` y `rofi/theme.rasi` desde la misma salida de Wallbash. Los archivos versionados siguen siendo fallbacks.
 
@@ -108,6 +113,8 @@ Modulos propios ya cubiertos:
 - battery;
 - clipboard basico con `cliphist`, `rofi` y `wl-copy`;
 - power menu con `wlogout`.
+
+El arranque propio tambien incluye persistencia de clipboard, almacenamiento de texto e imagenes para cliphist y Udiskie.
 
 La configuracion se instala en `~/.config/grano/waybar/`. `hypr/hyprland.conf` la inicia con rutas explicitas cuando Grano sea la configuracion activa. Esto no reemplaza la Waybar activa mientras la sesion siga usando HyDE.
 

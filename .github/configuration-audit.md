@@ -125,6 +125,7 @@ Confirmados por procesos o servicios de usuario:
 - `wl-paste` para texto e imagenes
 - Udiskie
 - Kitty
+- Pypr con scratchpad opcional
 
 `hyprpaper` esta instalado y tiene configuracion, pero no se observo un proceso activo. El wallpaper actual lo gestiona el servicio de HyDE:
 
@@ -193,6 +194,13 @@ Se crearon configuraciones propias en `hypridle/hypridle.conf` y `hyprlock/hyprl
 
 La configuracion propia usa el wallpaper y `colors.conf` instalados por Grano, sin cargar boilerplate de HyDE. Todavia debe conectarse al servicio de arranque propio cuando se retire HyDE.
 
+### Servicios restantes
+
+- El watcher `config.lua` pertenece a HyDE y no se migra: genera estado y archivos internos de HyDE.
+- Pypr tiene una configuracion propia en `pypr/config.toml` y se inicia de forma opcional desde `hyprland.conf` si el binario esta instalado.
+- Hyprsunset existe como daemon, pero su CLI no ofrece un control IPC/consulta documentado suficiente para reemplazar con seguridad el modulo de Waybar.
+- Awww y `wallpaper.sh` siguen siendo el backend actual de HyDE. Grano usa Hyprpaper y no debe iniciar ambos backends.
+
 ## Archivos disponibles que no deben asumirse activos
 
 La existencia de un archivo no demuestra que se cargue. Esto aplica especialmente a:
@@ -227,6 +235,8 @@ La existencia de un archivo no demuestra que se cargue. Esto aplica especialment
 - [x] Migrar Hyprlock y Hypridle eliminando `hyde-shell`.
 - [x] Conectar Hyprlock propio al flujo de bloqueo de Grano.
 - [x] Conectar Hypridle propio al arranque de la configuracion de Grano.
+- [x] Migrar clipboard persistente, almacenamiento de cliphist y Udiskie a comandos propios.
+- [x] Separar Pypr de la configuracion interna de HyDE.
 - [ ] Auditar servicios de arranque y decidir cuales necesita Grano.
 - [ ] Definir una estrategia de instalacion reproducible para una instalacion limpia de Arch Linux.
 

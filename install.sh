@@ -1,6 +1,18 @@
 #!/bin/sh
 set -eu
 
+printf '%s\n' \
+'  ____                              ' \
+' / ___|_ __ __ _ _ __  ____         ' \
+'| |  _| __/ _` | _ \ /  _  \        ' \
+'| |_| | || (_| | | | | (_| /        ' \
+' \____|\__\__,_|_| |_|\___/         ' \
+'                                    ' \
+' +--------------------------------+ ' \
+' |  GRANO // INSERT COIN         | ' \
+' |  ARCH LINUX RICE INSTALLER    | ' \
+' +--------------------------------+ '
+
 repo_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 config_home=${XDG_CONFIG_HOME:-$HOME/.config}
 grano_config="$config_home/grano"
@@ -33,11 +45,14 @@ install -m 644 "$repo_dir/hyprlock/hyprlock.conf" \
 install -m 644 "$repo_dir/hypridle/hypridle.conf" \
     "$grano_config/hypridle.conf"
 install -m 644 "$repo_dir/pypr/config.toml" "$grano_config/pypr.toml"
+install -d "$grano_config/uwsm/env-hyprland.d"
+install -m 755 "$repo_dir/uwsm/env-hyprland.d/00-grano.sh" \
+    "$grano_config/uwsm/env-hyprland.d/00-grano.sh"
 
-if [ -x "$HOME/.local/lib/hyde/wallbash.sh" ] && command -v magick >/dev/null 2>&1; then
+if command -v magick >/dev/null 2>&1; then
     "$grano_config/generate-colors.sh" \
         "$grano_config/wallpapers/wallpaper.webp" \
-        "$grano_config/colors.conf" || printf '%s\n' 'Wallbash generation failed; keeping fallback colors.' >&2
+    "$grano_config/colors.conf" || printf '%s\n' 'Color generation failed; keeping fallback colors.' >&2
 fi
 
 printf '%s\n' "Installed Grano wallpaper, Hyprpaper, and Waybar files in $grano_config"
