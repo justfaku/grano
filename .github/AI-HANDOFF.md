@@ -123,9 +123,8 @@ Orden recomendado:
    - crear un menu propio si se necesita el menu de HyDE.
 2. Retirar la Waybar de HyDE cuando Grano sea la sesion activa.
 3. Conectar Kitty y Rofi propios al arranque/configuracion activa de Grano.
-4. Migrar Hyprlock sin `~/.local/share/hypr/hyprlock.conf` ni variables generadas por HyDE.
-5. Migrar Hypridle y reemplazar `hyde-shell lockscreen.sh`.
-6. Reemplazar servicios de arranque `hyde-*` por mecanismos propios.
+4. Conectar Hyprlock e Hypridle propios al arranque de Grano.
+5. Reemplazar servicios de arranque `hyde-*` por mecanismos propios.
 7. Decidir el futuro de Wallbash:
    - dependencia independiente;
    - algoritmo extraido;

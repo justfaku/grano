@@ -185,9 +185,13 @@ El tema existente de Rofi no tenia una dependencia directa de HyDE. Se extrajo a
 
 `~/.config/hypr/hypridle.conf` depende de `hyde-shell` para lockscreen y unlock.
 
+Se crearon configuraciones propias en `hypridle/hypridle.conf` y `hyprlock/hyprlock.conf`. Hypridle usa `hyprlock` directamente y conserva los tiempos efectivos observados; no se inicia ni reemplaza el servicio de HyDE durante esta etapa.
+
 ### Hyprlock
 
 `~/.config/hypr/hyprlock.conf` carga configuracion desde `~/.local/share/hypr/` y selecciona el layout `~/.config/hypr/hyprlock/HyDE.conf`.
+
+La configuracion propia usa el wallpaper y `colors.conf` instalados por Grano, sin cargar boilerplate de HyDE. Todavia debe conectarse al servicio de arranque propio cuando se retire HyDE.
 
 ## Archivos disponibles que no deben asumirse activos
 
@@ -220,7 +224,8 @@ La existencia de un archivo no demuestra que se cargue. Esto aplica especialment
 - [x] Separar configuracion de Kitty y Rofi de sus temas generados.
 - [x] Generar las paletas de Waybar, Kitty y Rofi desde la salida comun de Wallbash.
 - [ ] Conectar Kitty y Rofi propios al arranque/configuracion activa de Grano.
-- [ ] Migrar Hyprlock y Hypridle eliminando `hyde-shell`.
+- [x] Migrar Hyprlock y Hypridle eliminando `hyde-shell`.
+- [ ] Conectar Hyprlock e Hypridle propios al arranque de Grano.
 - [ ] Auditar servicios de arranque y decidir cuales necesita Grano.
 - [ ] Definir una estrategia de instalacion reproducible para una instalacion limpia de Arch Linux.
 
