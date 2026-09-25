@@ -40,12 +40,9 @@ La configuracion propia ya existe en el repositorio y se instala de forma aislad
 
 ## Pendientes
 
-1. Completar los modulos restantes de Waybar.
-2. Conectar Kitty y Rofi a los lanzadores propios.
-3. Revisar si Pypr debe ser opcional o instalarse como dependencia.
-4. Verificar paquetes Arch en una instalacion limpia.
-5. Activar UWSM de Grano como ultimo paso.
-6. Retirar la configuracion externa y servicios duplicados solo despues de validar Grano.
+1. Verificar paquetes Arch en una instalacion limpia.
+2. Activar manualmente UWSM de Grano como ultimo paso, fuera de una sesion activa.
+3. Retirar la configuracion externa y servicios duplicados solo despues de validar Grano.
 
 ## Reglas de seguridad
 

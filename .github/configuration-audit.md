@@ -39,18 +39,18 @@ La activacion de `uwsm/env-hyprland.d/00-grano.sh` es el ultimo paso de la migra
 
 ## Pendientes
 
-- [ ] Completar modulos restantes de Waybar: Cava, keybind hint, control de temperatura y menu principal.
-- [ ] Conectar Kitty y Rofi propios a los lanzadores de Grano.
+- [x] Completar la Waybar propia con módulos funcionales sin dependencias externas.
+- [x] Conectar Kitty y Rofi propios a los lanzadores de Grano.
 - [ ] Retirar servicios externos de wallpaper, barra, idle y configuracion cuando Grano sea la sesion activa.
-- [ ] Decidir si Pypr se instala como opcion o se elimina del arranque.
+- [x] Mantener Pypr como opcion y no iniciarlo automaticamente.
 - [ ] Verificar nombres de paquetes Arch en una instalacion limpia.
-- [ ] Activar y probar la plantilla UWSM de Grano como ultimo paso.
+- [ ] Activar manualmente la plantilla UWSM de Grano como ultimo paso, tras cerrar la sesion actual.
 
 ## Decisiones
 
 - Hyprland usa `hyprland.conf`, no Lua, para mantener la configuracion legible y nativa.
 - Hyprpaper es el unico backend de wallpaper de Grano.
-- La generacion de colores es propia y usa ImageMagick; no depende de herramientas externas del sistema anterior.
+- La generacion de colores usa ImageMagick y puede usar Wallbash como backend opcional.
 - Los fallbacks de color permanecen versionados.
 - No se instalan ni se activan servicios de escritorio automaticamente durante la migracion.
 
