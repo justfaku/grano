@@ -1,327 +1,65 @@
-# Grano: auditoria de configuracion actual
+# Auditoria de Grano
 
 Estado: migracion incremental en curso
-Fecha: 2026-09-24
+Fecha: 2026-09-25
 
-Este documento registra lo observado en la sesion actual. No es una configuracion de Grano y no debe usarse como destino para archivos de HyDE.
+Este documento describe el estado de la configuracion propia del repositorio. No representa automaticamente la sesion activa del sistema.
 
-## Resumen
+## Estado implementado
 
-La sesion actual usa HyDE como framework de arranque y configuracion sobre Hyprland. El repositorio de Grano ya contiene una primera configuracion propia aislada, pero la sesion activa todavia no la usa.
+- `hypr/hyprland.conf`: monitor, input, decoracion, blur, layout, animaciones, reglas, keybinds y arranque propio.
+- `hypr/colors.conf`: fallback de colores.
+- `scripts/generate-colors.sh`: generador propio basado en ImageMagick.
+- `hypr/hyprpaper.conf`: wallpaper estatico.
+- `waybar/`: barra propia, con temas generables y fallback.
+- `kitty/`: configuracion y tema propios.
+- `rofi/`: tema propio.
+- `hyprlock/`: lockscreen propio.
+- `hypridle/`: idle manager propio.
+- `pypr/`: scratchpad opcional.
+- `uwsm/env-hyprland.d/00-grano.sh`: plantilla de entorno, aun no activada.
+- `install.sh`: instalacion aislada bajo `~/.config/grano/`.
 
-Para el estado resumido y las instrucciones de continuidad, leer tambien `.github/AI-HANDOFF.md`.
-
-La cadena efectiva observada es:
-
-```text
-UWSM -> HyDE activation -> Hyprland -> ~/.local/share/hypr/hyde.lua
-     -> modulos Lua de HyDE -> estado generado -> configuracion efectiva
-```
-
-El archivo `~/.config/hypr/hyprland.conf` no representa la configuracion completa de la sesion actual.
-
-## Punto de entrada efectivo
-
-Variables confirmadas en la sesion:
-
-- `HYDE_ACTIVATED=1`
-- `HYDE_MODE=lua`
-- `HYDE_FEATURE_LUA=1`
-- `HYPRLAND_CONFIG=~/.local/share/hypr/hyde.lua`
-
-`hyde.lua` carga estos modulos principales:
-
-- `variables`
-- `defaults`
-- `window_rules`
-- `layer_rules`
-- `env`
-- `key_binds`
-- `dynamic`
-- `events`
-- `start_up`
-- `monitors`, si existe
-- `hyprland`, si existe
-- `lua_state.workflows`
-
-## Configuracion visual efectiva
-
-El estado generado por HyDE se encuentra en `~/.local/state/hyde/lua_state/`.
-
-Valores confirmados mediante `hyprctl` y `hypr_theme.lua`:
-
-- Layout: `dwindle`
-- Rounding: `10`
-- Gaps internos: `3`
-- Gaps externos: `8`
-- Borde: `2`
-- Opacidad activa: `0.90`
-- Opacidad inactiva: `0.75`
-- Blur: activo
-- Blur size: `5`
-- Blur passes: `4`
-- Blur ignora opacidad: activo
-- Sombras: desactivadas
-- Resize sobre bordes: activo
-- VRR: `0`
-- `dwindle.preserve_split`: activo
-- `master.new_status`: `master`
-
-No se observaron errores con `hyprctl configerrors`.
-
-## Animacion y tema
-
-Animacion seleccionada:
+## Arquitectura
 
 ```text
-~/.local/share/hypr/lua/animations/macos.lua
+wallpaper
+  -> scripts/generate-colors.sh
+  -> ~/.config/grano/colors.conf
+  -> Hyprland / Waybar / Kitty / Rofi / Hyprlock
 ```
 
-El estado generado la selecciona desde `lua_state/animations.lua`.
+La paleta versionada funciona como fallback cuando ImageMagick no esta disponible.
 
-Caracteristicas principales del perfil:
+## Estado de sesion
 
-- curvas spring para abrir y cerrar ventanas;
-- ventanas con estilo `popin 90%`;
-- movimiento de ventanas con `slide`;
-- transiciones de workspace con `slidefade 20%`;
-- fades, bordes y cambios de workspace activos.
+La sesion del sistema todavia usa una configuracion externa y sus servicios propios. Grano no debe activarse encima de ella porque produciria backends duplicados para wallpaper, barra o idle.
 
-Tema seleccionado:
-
-- HyDE: `Decay Green`
-- GTK: `Decay-Green`
-- Iconos: `Tela-circle-green`
-- Esquema: `prefer-dark`
-- Wallbash: modo `theme`
-- Shader: `disable`
-
-Los colores de los bordes provienen de `~/.local/state/hyde/lua_state/colors.lua`, generado por Wallbash.
-
-En `hypr/colors.conf` existe un fallback estatico de los cuatro colores usados por los bordes. `hyprland.conf` lo carga con `source`.
-
-`hypr/colors.conf` contiene ahora la paleta estatica de fallback. `scripts/generate-colors.sh` usa Wallbash sobre el wallpaper instalado y genera un reemplazo de `~/.config/grano/colors.conf`; si Wallbash no esta disponible, se conserva el fallback.
-
-## Dependencia opcional de Wallbash
-
-Grano no instala Wallbash en una instalacion limpia. El instalador solo lo usa si ya existe en `~/.local/lib/hyde/wallbash.sh` y si ImageMagick esta disponible. En caso contrario, Grano conserva `colors.conf` como fallback y sigue funcionando.
-
-Actualmente Wallbash proviene de HyDE, por lo que instalarlo como parte obligatoria de Grano mantendria una dependencia del framework que queremos eliminar. En una etapa futura habra que decidir entre extraer el algoritmo necesario, encontrar una implementacion independiente o crear un generador propio de colores.
-
-## Componentes activos de la sesion
-
-Confirmados por procesos o servicios de usuario:
-
-- Hyprland
-- Waybar
-- Hypridle
-- Hyprsunset
-- wallpaper de HyDE
-- watcher de configuracion de HyDE
-- Pypr
-- Cava para Waybar
-- Wallbash/Swaync client
-- `wl-clip-persist`
-- `wl-paste` para texto e imagenes
-- Udiskie
-- Kitty
-- Pypr con scratchpad opcional
-
-`hyprpaper` esta instalado y tiene configuracion, pero no se observo un proceso activo. El wallpaper actual lo gestiona el servicio de HyDE:
-
-```text
-~/.local/lib/hyde/wallpaper.sh --start --global
-```
-
-La configuracion existente de Hyprpaper apunta a `~/Pictures/wallpaper.png`, pero ese archivo no existe. El backend observado en la sesion es `awww`, iniciado y administrado por HyDE. Grano usa Hyprpaper como backend propio en su configuracion aislada; no se activa en la sesion actual mientras HyDE siga administrando Awww.
-
-El recurso `wallpaper.webp` esta en `assets/wallpapers/wallpaper.webp`. Es un WebP de 1080x675. Se eligio Hyprpaper como backend de Grano por ser estatico, simple y ya estar instalado. La convencion de instalacion es `~/.config/grano/wallpapers/wallpaper.webp`; `install.sh` y `hypr/hyprland.conf` ya estan preparados para esa ruta cuando Grano sea la configuracion activa.
-
-## Dependencias directas de HyDE
-
-### Hyprland
-
-- UWSM activa el entorno HyDE.
-- `HYPRLAND_CONFIG` apunta a `hyde.lua`.
-- Los modulos Lua de `~/.local/share/hypr/lua/` definen gran parte del comportamiento.
-- Los valores finales de tema y animacion se generan en `~/.local/state/hyde/lua_state/`.
-
-### Waybar
-
-Configuracion del usuario:
-
-- `~/.config/waybar/config.jsonc`
-- `~/.config/waybar/includes/includes.json`
-- `~/.config/waybar/style.css`
-- `~/.config/waybar/theme.css`
-- `~/.config/waybar/user-style.css`
-
-Dependencias observadas:
-
-- modulos en `~/.local/share/waybar/modules/`;
-- estilos en `~/.local/share/waybar/styles/`;
-- colores en `~/.cache/hyde/wallbash/gtk.css`;
-- modulos como `custom/hyde-menu`;
-- script `~/.local/lib/hyde/cava.py`.
-
-Solo debe existir una instancia de Waybar. Durante la auditoria se inicio una instancia temporal de diagnostico y fue cerrada; la verificacion final mostro una sola instancia administrada por HyDE.
-
-La barra visible usa actualmente estos grupos y modulos: workspaces, Cava, idle inhibitor, clock, backlight, pulseaudio, microfono, tray, battery, keybind hint, cliphist, hyprsunset, menu de HyDE y power. `includes.json` carga muchos modulos adicionales disponibles, pero no todos forman parte de la barra visible.
-
-Se creo una configuracion propia en `waybar/config.jsonc` y `waybar/style.css` con los modulos funcionales que no necesitan HyDE. Se instala de forma aislada bajo `~/.config/grano/` y `hypr/hyprland.conf` la conecta al arranque propio de Grano. Esto no reemplaza la barra activa mientras la sesion siga usando HyDE.
-
-Los modulos que quedaron fuera por ahora son Cava, keybind hint, hyprsunset con menu y menu de HyDE. El clipboard basico ya usa `cliphist` y `rofi` directamente, y el power menu usa `wlogout` directamente en la configuracion propia. Hyprsunset queda bloqueado temporalmente porque su CLI no ofrece consulta ni control IPC documentado; lanzarlo desde Waybar podria crear procesos duplicados.
-
-### Kitty
-
-`~/.config/kitty/kitty.conf` incluye `hyde.conf`, que a su vez incluye `theme.conf`.
-
-Se creo una configuracion propia en `kitty/kitty.conf` y `kitty/theme.conf`, sin incluir `hyde.conf`. Se instala de forma aislada bajo `~/.config/grano/kitty/`. `generate-colors.sh` puede regenerar `kitty/theme.conf` desde la misma paleta Wallbash.
-
-### Rofi
-
-El tema existente de Rofi no tenia una dependencia directa de HyDE. Se extrajo a `rofi/theme.rasi` y se instala de forma aislada bajo `~/.config/grano/rofi/`. `generate-colors.sh` puede regenerar ese tema desde Wallbash. Los comandos que invocan menus Rofi siguen dependiendo de HyDE y se migraran junto con los keybinds y scripts propios.
-
-### Hypridle
-
-`~/.config/hypr/hypridle.conf` depende de `hyde-shell` para lockscreen y unlock.
-
-Se crearon configuraciones propias en `hypridle/hypridle.conf` y `hyprlock/hyprlock.conf`. Hypridle usa `hyprlock` directamente y conserva los tiempos efectivos observados; no se inicia ni reemplaza el servicio de HyDE durante esta etapa.
-
-### Hyprlock
-
-`~/.config/hypr/hyprlock.conf` carga configuracion desde `~/.local/share/hypr/` y selecciona el layout `~/.config/hypr/hyprlock/HyDE.conf`.
-
-La configuracion propia usa el wallpaper y `colors.conf` instalados por Grano, sin cargar boilerplate de HyDE. Todavia debe conectarse al servicio de arranque propio cuando se retire HyDE.
-
-### Servicios restantes
-
-- El watcher `config.lua` pertenece a HyDE y no se migra: genera estado y archivos internos de HyDE.
-- Pypr tiene una configuracion propia en `pypr/config.toml` y se inicia de forma opcional desde `hyprland.conf` si el binario esta instalado.
-- Hyprsunset existe como daemon, pero su CLI no ofrece un control IPC/consulta documentado suficiente para reemplazar con seguridad el modulo de Waybar.
-- Awww y `wallpaper.sh` siguen siendo el backend actual de HyDE. Grano usa Hyprpaper y no debe iniciar ambos backends.
-
-## Archivos disponibles que no deben asumirse activos
-
-La existencia de un archivo no demuestra que se cargue. Esto aplica especialmente a:
-
-- `~/.config/hypr/hyprland.conf`
-- `~/.config/hypr/animations.conf`
-- `~/.config/hypr/userprefs.conf`
-- `~/.config/hypr/monitors.conf`
-- workflows alternativos como `gaming`, `powersaver`, `snappy` y `editing`
-- perfiles alternativos de animacion.
+La activacion de `uwsm/env-hyprland.d/00-grano.sh` es el ultimo paso de la migracion.
 
 ## Pendientes
 
-- [x] Documentar el orden exacto de precedencia entre `defaults`, `dynamic`, estado generado y workflows.
-- [x] Documentar reglas de ventanas y reglas de capas efectivamente cargadas.
-- [x] Auditar keybinds efectivos y separar comandos HyDE de comandos reemplazables.
-- [x] Auditar monitores y convertir el monitor actualmente usado a configuracion propia.
-- [x] Extraer la decoracion efectiva a una configuracion explicita de Grano.
-- [x] Extraer las animaciones de `macos.lua` sin copiar la infraestructura Lua de HyDE.
-- [x] Determinar el flujo real de wallpaper, Wallbash y colores.
-- [x] Crear la configuracion propia de Hyprpaper y definir la ruta instalada de los assets.
-- [x] Implementar `install.sh` para instalar el wallpaper en `~/.config/grano/wallpapers/`.
-- [x] Conectar Hyprpaper al arranque propio de Grano sin iniciar una segunda instancia de wallpaper.
-- [x] Reemplazar la paleta estatica temporal por colores generados desde el wallpaper de `assets/wallpapers/` mediante Wallbash, con fallback.
-- [x] Separar modulos funcionales de Waybar de modulos propios de HyDE.
-- [x] Conectar la configuracion propia de Waybar al arranque de Grano.
-- [ ] Reemplazar los modulos de Waybar que todavia dependen de HyDE.
-- [ ] Definir un control seguro para hyprsunset sin iniciar procesos duplicados.
-- [x] Separar configuracion de Kitty y Rofi de sus temas generados.
-- [x] Generar las paletas de Waybar, Kitty y Rofi desde la salida comun de Wallbash.
-- [ ] Conectar Kitty y Rofi propios al arranque/configuracion activa de Grano.
-- [x] Migrar Hyprlock y Hypridle eliminando `hyde-shell`.
-- [x] Conectar Hyprlock propio al flujo de bloqueo de Grano.
-- [x] Conectar Hypridle propio al arranque de la configuracion de Grano.
-- [x] Migrar clipboard persistente, almacenamiento de cliphist y Udiskie a comandos propios.
-- [x] Separar Pypr de la configuracion interna de HyDE.
-- [ ] Auditar servicios de arranque y decidir cuales necesita Grano.
-- [ ] Definir una estrategia de instalacion reproducible para una instalacion limpia de Arch Linux.
+- [ ] Completar modulos restantes de Waybar: Cava, keybind hint, control de temperatura y menu principal.
+- [ ] Conectar Kitty y Rofi propios a los lanzadores de Grano.
+- [ ] Retirar servicios externos de wallpaper, barra, idle y configuracion cuando Grano sea la sesion activa.
+- [ ] Decidir si Pypr se instala como opcion o se elimina del arranque.
+- [ ] Verificar nombres de paquetes Arch en una instalacion limpia.
+- [ ] Activar y probar la plantilla UWSM de Grano como ultimo paso.
 
-La migracion de animaciones ya fue realizada en `hypr/hyprland.conf`. El perfil no conserva el nombre `macos`: ahora forma parte de la configuracion propia de Grano. Las curvas `spring` de la API Lua fueron reemplazadas por aproximaciones Bezier declarativas, porque `hyprland.conf` no expone la API de curvas spring. La configuracion fue validada con `Hyprland --verify-config`.
+## Decisiones
 
-## Orden de migracion propuesto
+- Hyprland usa `hyprland.conf`, no Lua, para mantener la configuracion legible y nativa.
+- Hyprpaper es el unico backend de wallpaper de Grano.
+- La generacion de colores es propia y usa ImageMagick; no depende de herramientas externas del sistema anterior.
+- Los fallbacks de color permanecen versionados.
+- No se instalan ni se activan servicios de escritorio automaticamente durante la migracion.
 
-1. Decoracion de Hyprland.
-2. Animaciones y layout.
-3. Monitores.
-4. Keybinds, reglas y scripts usados.
-5. Wallpaper, Wallbash y paleta.
-6. Waybar.
-7. Kitty y Rofi.
-8. Hyprlock e Hypridle.
-9. Servicios de arranque y eliminacion progresiva de HyDE.
+## Validaciones
 
-Cada etapa debe producir un cambio pequeno, verificable y separado de los demas. No modificar archivos internos de HyDE como solucion permanente.
-
-## Pendientes resumidos
-
-1. Completar los modulos de Waybar que todavia dependen de HyDE: Cava, keybind hint, hyprsunset y menu principal.
-2. Conectar Waybar propia al arranque de Grano y retirar progresivamente la Waybar de HyDE.
-3. Migrar Kitty y Rofi, separando configuracion funcional de temas.
-4. Migrar Hyprlock e Hypridle y eliminar `hyde-shell`.
-5. Reemplazar servicios de arranque `hyde-*` por servicios o scripts propios.
-6. Resolver Wallbash: dependencia independiente, algoritmo extraido o generador propio.
-7. Completar `install.sh` para una instalacion limpia de Arch Linux y documentar dependencias.
-8. Conectar la configuracion propia completa a la sesion y retirar la dependencia de HyDE de forma gradual.
-
-## Primer paso de migracion
-
-Se creo `hypr/hyprland.conf` como configuracion propia y aislada de Grano. Todavia no esta conectada a la sesion actual.
-
-Incluye la parte declarativa que Hyprland puede resolver directamente:
-
-- monitor actual;
-- teclado e input;
-- decoracion, blur, opacidad y sombras;
-- gaps, bordes y colores;
-- layout `dwindle`;
-- opciones de `dwindle`, `master`, `misc`, `xwayland` y `snap`;
-- activacion general de animaciones.
-
-La configuracion fue validada con `Hyprland --verify-config` y devolvio `config ok`.
-
-## Keybinds migrados
-
-`hypr/hyprland.conf` contiene ahora los keybinds nativos de Hyprland para:
-
-- cerrar, forzar el cierre, salir, hacer floating y pseudo-tile;
-- fullscreen y cambio de split;
-- mover el foco;
-- redimensionar y mover ventanas;
-- mover ventanas con el raton;
-- navegar y mover ventanas entre los workspaces 1 a 10.
-
-Se dejaron fuera los binds que llaman `hyde-shell`, menus de Rofi, wallpaper, lockscreen, volumen, brillo, capturas y seleccion de temas. Esos comandos requieren una migracion separada de sus scripts y dependencias.
-
-## Reglas migradas
-
-`hypr/hyprland.conf` contiene ahora reglas declarativas para:
-
-- ventanas de dialogo, portales, gestores de archivos y utilidades flotantes;
-- ventanas Picture-in-Picture, con pin, posicion y tamano;
-- dialogos de autenticacion y seleccion de archivos;
-- `xwaylandvideobridge`, con sus restricciones de foco, animacion, blur, tamano y workspace;
-- capas de Rofi, notificaciones, Swaync, Waybar y logout;
-- capa `selection`, sin animacion.
-
-Estas reglas provienen de `window_rules.lua` y `layer_rules.lua`. Durante la auditoria, las capas observadas en ejecucion fueron `waybar` y `awww-daemon`; el resto de reglas corresponde a componentes disponibles que no estaban abiertos en ese momento.
-
-### Que puede vivir en hyprland.conf
-
-La mayor parte de la configuracion del compositor puede mantenerse en un unico archivo legible: monitores, input, decoracion, layouts, animaciones, reglas, keybinds, variables y comandos `exec-once`.
-
-### Que no conviene forzar dentro de hyprland.conf
-
-Estos componentes siguen siendo procesos o logica externa y deben mantenerse separados:
-
-- Waybar y sus modulos CSS/JSON;
-- Hypridle y Hyprlock;
-- wallpaper y seleccion de wallpapers;
-- Wallbash y generacion de colores;
-- scripts de menu, clipboard y utilidades;
-- Kitty, Rofi y otras aplicaciones.
-
-La arquitectura objetivo puede ser un `hyprland.conf` principal con `source` puntuales para bloques grandes, pero no debe convertir servicios externos en configuracion falsa del compositor.
+```sh
+/usr/bin/Hyprland --verify-config --config hypr/hyprland.conf
+/usr/bin/sh -n install.sh
+/usr/bin/bash -n scripts/generate-colors.sh
+/usr/bin/jq empty waybar/config.jsonc
+/usr/bin/git diff --check
+```
