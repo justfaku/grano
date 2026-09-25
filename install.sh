@@ -18,6 +18,12 @@ install -m 644 "$repo_dir/waybar/config.jsonc" \
     "$grano_config/waybar/config.jsonc"
 install -m 644 "$repo_dir/waybar/style.css" \
     "$grano_config/waybar/style.css"
+install -m 644 "$repo_dir/waybar/theme.css" \
+    "$grano_config/waybar/theme.css"
+install -d "$grano_config/kitty" "$grano_config/rofi"
+install -m 644 "$repo_dir/kitty/kitty.conf" "$grano_config/kitty/kitty.conf"
+install -m 644 "$repo_dir/kitty/theme.conf" "$grano_config/kitty/theme.conf"
+install -m 644 "$repo_dir/rofi/theme.rasi" "$grano_config/rofi/theme.rasi"
 
 if [ -x "$HOME/.local/lib/hyde/wallbash.sh" ] && command -v magick >/dev/null 2>&1; then
     "$grano_config/generate-colors.sh" \
