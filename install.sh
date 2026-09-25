@@ -24,6 +24,11 @@ install -d "$grano_config/kitty" "$grano_config/rofi"
 install -m 644 "$repo_dir/kitty/kitty.conf" "$grano_config/kitty/kitty.conf"
 install -m 644 "$repo_dir/kitty/theme.conf" "$grano_config/kitty/theme.conf"
 install -m 644 "$repo_dir/rofi/theme.rasi" "$grano_config/rofi/theme.rasi"
+install -d "$grano_config/hyprlock" "$grano_config/hypridle"
+install -m 644 "$repo_dir/hyprlock/hyprlock.conf" \
+    "$grano_config/hyprlock.conf"
+install -m 644 "$repo_dir/hypridle/hypridle.conf" \
+    "$grano_config/hypridle.conf"
 
 if [ -x "$HOME/.local/lib/hyde/wallbash.sh" ] && command -v magick >/dev/null 2>&1; then
     "$grano_config/generate-colors.sh" \

@@ -167,13 +167,19 @@ Solo debe existir una instancia de Waybar. Durante la auditoria se inicio una in
 
 La barra visible usa actualmente estos grupos y modulos: workspaces, Cava, idle inhibitor, clock, backlight, pulseaudio, microfono, tray, battery, keybind hint, cliphist, hyprsunset, menu de HyDE y power. `includes.json` carga muchos modulos adicionales disponibles, pero no todos forman parte de la barra visible.
 
-Se creo una configuracion propia en `waybar/config.jsonc` y `waybar/style.css` con los modulos funcionales que no necesitan HyDE. Todavia no reemplaza la barra activa: se instala de forma aislada bajo `~/.config/grano/waybar/` y debe conectarse al arranque propio de Grano despues de completar los modulos dependientes.
+Se creo una configuracion propia en `waybar/config.jsonc` y `waybar/style.css` con los modulos funcionales que no necesitan HyDE. Se instala de forma aislada bajo `~/.config/grano/` y `hypr/hyprland.conf` la conecta al arranque propio de Grano. Esto no reemplaza la barra activa mientras la sesion siga usando HyDE.
 
 Los modulos que quedaron fuera por ahora son Cava, keybind hint, hyprsunset con menu y menu de HyDE. El clipboard basico ya usa `cliphist` y `rofi` directamente, y el power menu usa `wlogout` directamente en la configuracion propia. Hyprsunset queda bloqueado temporalmente porque su CLI no ofrece consulta ni control IPC documentado; lanzarlo desde Waybar podria crear procesos duplicados.
 
 ### Kitty
 
 `~/.config/kitty/kitty.conf` incluye `hyde.conf`, que a su vez incluye `theme.conf`.
+
+Se creo una configuracion propia en `kitty/kitty.conf` y `kitty/theme.conf`, sin incluir `hyde.conf`. Se instala de forma aislada bajo `~/.config/grano/kitty/`. `generate-colors.sh` puede regenerar `kitty/theme.conf` desde la misma paleta Wallbash.
+
+### Rofi
+
+El tema existente de Rofi no tenia una dependencia directa de HyDE. Se extrajo a `rofi/theme.rasi` y se instala de forma aislada bajo `~/.config/grano/rofi/`. `generate-colors.sh` puede regenerar ese tema desde Wallbash. Los comandos que invocan menus Rofi siguen dependiendo de HyDE y se migraran junto con los keybinds y scripts propios.
 
 ### Hypridle
 
@@ -208,10 +214,12 @@ La existencia de un archivo no demuestra que se cargue. Esto aplica especialment
 - [x] Conectar Hyprpaper al arranque propio de Grano sin iniciar una segunda instancia de wallpaper.
 - [x] Reemplazar la paleta estatica temporal por colores generados desde el wallpaper de `assets/wallpapers/` mediante Wallbash, con fallback.
 - [x] Separar modulos funcionales de Waybar de modulos propios de HyDE.
-- [ ] Conectar la configuracion propia de Waybar al arranque de Grano.
+- [x] Conectar la configuracion propia de Waybar al arranque de Grano.
 - [ ] Reemplazar los modulos de Waybar que todavia dependen de HyDE.
 - [ ] Definir un control seguro para hyprsunset sin iniciar procesos duplicados.
-- [ ] Separar configuracion de Kitty y Rofi de sus temas generados.
+- [x] Separar configuracion de Kitty y Rofi de sus temas generados.
+- [x] Generar las paletas de Waybar, Kitty y Rofi desde la salida comun de Wallbash.
+- [ ] Conectar Kitty y Rofi propios al arranque/configuracion activa de Grano.
 - [ ] Migrar Hyprlock y Hypridle eliminando `hyde-shell`.
 - [ ] Auditar servicios de arranque y decidir cuales necesita Grano.
 - [ ] Definir una estrategia de instalacion reproducible para una instalacion limpia de Arch Linux.

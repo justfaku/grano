@@ -81,6 +81,11 @@ La sesion actual usa Awww administrado por HyDE, no el Hyprpaper de Grano. No ca
 - `hyprpaper.conf`;
 - `waybar/config.jsonc`;
 - `waybar/style.css`.
+- `kitty/kitty.conf`;
+- `kitty/theme.conf`;
+- `rofi/theme.rasi`.
+
+`scripts/generate-colors.sh` regenera tambien `waybar/theme.css`, `kitty/theme.conf` y `rofi/theme.rasi` desde la misma salida de Wallbash. Los archivos versionados siguen siendo fallbacks.
 
 Si Wallbash e ImageMagick existen, genera colores dinamicos durante la instalacion. La prueba aislada del instalador ya paso.
 
@@ -103,7 +108,7 @@ Modulos propios ya cubiertos:
 - clipboard basico con `cliphist`, `rofi` y `wl-copy`;
 - power menu con `wlogout`.
 
-La configuracion se instala en `~/.config/grano/waybar/`, pero aun no reemplaza la Waybar activa de HyDE.
+La configuracion se instala en `~/.config/grano/waybar/`. `hypr/hyprland.conf` la inicia con rutas explicitas cuando Grano sea la configuracion activa. Esto no reemplaza la Waybar activa mientras la sesion siga usando HyDE.
 
 `style.css` usa deliberadamente `@define-color`, que es sintaxis GTK/Waybar valida. El parser CSS generico de VS Code puede marcar falsos positivos.
 
@@ -116,8 +121,8 @@ Orden recomendado:
    - reemplazar keybind hint;
    - decidir un control seguro para Hyprsunset, sin lanzar procesos duplicados;
    - crear un menu propio si se necesita el menu de HyDE.
-2. Conectar la Waybar propia al arranque de Grano y retirar la de HyDE.
-3. Migrar Kitty y Rofi, separando opciones funcionales de temas.
+2. Retirar la Waybar de HyDE cuando Grano sea la sesion activa.
+3. Conectar Kitty y Rofi propios al arranque/configuracion activa de Grano.
 4. Migrar Hyprlock sin `~/.local/share/hypr/hyprlock.conf` ni variables generadas por HyDE.
 5. Migrar Hypridle y reemplazar `hyde-shell lockscreen.sh`.
 6. Reemplazar servicios de arranque `hyde-*` por mecanismos propios.
