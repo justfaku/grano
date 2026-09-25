@@ -25,7 +25,7 @@ Esta lista describe los comandos usados por la configuracion propia.
 
 ## Opcionales
 
-- Pypr para scratchpads.
+- Pypr para scratchpads. Es opcional y no se inicia automaticamente.
 - pavucontrol-qt para el panel grafico de audio.
 - Cava si se implementa el modulo de visualizacion de audio.
 - Wallbash como backend alternativo de colores. No es obligatorio.

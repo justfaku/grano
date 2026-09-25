@@ -55,4 +55,4 @@ if command -v magick >/dev/null 2>&1; then
     "$grano_config/colors.conf" || printf '%s\n' 'Color generation failed; keeping fallback colors.' >&2
 fi
 
-printf '%s\n' "Installed Grano wallpaper, Hyprpaper, and Waybar files in $grano_config"
+printf '%s\n' "Installed Grano configuration in $grano_config"

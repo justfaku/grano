@@ -59,6 +59,13 @@ Grano is currently installed as an isolated tree under `~/.config/grano/`. The U
 
 Activating it is the final migration step, after the remaining session services and application integrations have been resolved. Do not activate it on top of another running desktop configuration.
 
+The final activation is intentionally manual. After logging out of the current session, install the environment template into the user's UWSM environment directory, then start a fresh Hyprland session through UWSM. Do not perform this step while another Hyprland session is running.
+
+```sh
+install -Dm755 ~/.config/grano/uwsm/env-hyprland.d/00-grano.sh \\
+	~/.config/uwsm/env-hyprland.d/00-grano.sh
+```
+
 ## Documentation
 
 - [Project handoff](.github/AI-HANDOFF.md): current state, decisions, validations and next steps.

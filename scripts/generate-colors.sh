@@ -15,7 +15,14 @@ hex_to_rgba() {
     printf 'rgba(%d,%d,%d,1)' "0x${value:0:2}" "0x${value:2:2}" "0x${value:4:2}"
 }
 
-background active inactive text border_active_start border_active_end border_inactive_start border_inactive_end
+background=''
+active=''
+inactive=''
+text=''
+border_active_start=''
+border_active_end=''
+border_inactive_start=''
+border_inactive_end=''
 
 tmp_dcol=""
 if [[ -x "$wallbash_bin" ]]; then
